@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
+import * as jose from 'jose'
 
 export const UserContext = createContext()
 
@@ -11,8 +12,20 @@ const [currentUser, setCurrentUser] = useState({
   });
 
 const login = (token) => {
-
+  let decodedToken = jose.decodeJwt(token);
+  setCurrentUser({
+    email:decodedToken.email,
+  _id:decodedToken._id,
+  token:token
+  })
+  localStorage.setItem("token", JSON.stringify(token));
+  setIsLoggedIn(true)
 }
+
+const logout = () => {
+  localStorage.removeItem("token");
+  setIsLoggedIn(false);
+};
 
 
 return (
@@ -22,7 +35,8 @@ return (
         isLoggedIn,
         setCurrentUser,
         currentUser,
-        login
+        login,
+        logout
       }}
     >
       {children}

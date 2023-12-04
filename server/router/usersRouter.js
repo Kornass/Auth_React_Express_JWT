@@ -6,7 +6,7 @@ const {
 
 } = require("../controllers/usersController");
 
-// const { verify_token } = require("../middleware/verifyTokenMiddleware");
+const { verify_token } = require("../middlewares/authMiddleware");
 
 router.post("/register", register, login);
 router.post("/login", login);
