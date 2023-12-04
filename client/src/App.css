@@ -1,0 +1,41 @@
+nav {
+  background-color: black;
+  height: 10vh;
+  color: white;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+nav a {
+  text-decoration: none;
+  color: white;
+}
+nav a:hover {
+transform: scale(1.2);
+}
+form {
+  display: flex;
+ flex-direction: column;
+ width: 50%;
+ margin: auto;
+ justify-content: center;
+ align-items: center;
+}
+input, button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+form > * {
+  margin: 0.3rem auto;
+}
+button {
+  margin-top: 1rem;
+  background-color: white;
+}
+button:hover {
+transform: scale(1.2);
+transition: 0.5s;
+background-color: rgb(154, 154, 243);
+color: white;
+border-color: white;
+}
