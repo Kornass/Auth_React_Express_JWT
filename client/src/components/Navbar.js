@@ -1,12 +1,18 @@
-import React from 'react'
+import {useContext} from 'react'
 import { NavLink, useNavigate } from "react-router-dom";
+import { UserContext } from '../context/UserContext';
+function Navbar() {
 
-function Navbar({isLoggedIn}) {
+const {isLoggedIn} = useContext(UserContext)
+
   return (
     <nav>
   <NavLink to="/">Home</NavLink>  
-  <NavLink to="/sign-in">Log in</NavLink>  
-  <NavLink to="/sign-up">Sign up</NavLink>
+  {!isLoggedIn ? 
+   <><NavLink to="/register">Register</NavLink>  
+  <NavLink to="/log-in">Log in</NavLink></> : null }
+
+
 { isLoggedIn && <NavLink to="/dashboard">Dashboard</NavLink>}
     </nav>
   )

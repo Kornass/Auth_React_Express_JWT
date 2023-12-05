@@ -1,9 +1,9 @@
-import {useState} from 'react'
+import {useState, useContext} from 'react'
 import { URL } from '../config'
 import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
-
-function SignIn() {
+import { UserContext } from '../context/UserContext'
+function Register() {
     const [formData, setFormData] = useState({
         login:'',
         email:'',
@@ -11,6 +11,8 @@ function SignIn() {
         password2:'',
     })
     const [message,setMessage] = useState('')
+
+    const { login } = useContext(UserContext);
 
     const navigate = useNavigate()
     
@@ -23,8 +25,9 @@ const handleSubmit = async(e) => {
     try {
         let res = await axios.post(`${URL}/users/register`, formData )
         debugger
-        if(res.status == 200 && res.data && res.data.token && res.data.email && res.data._id) {
+        if(res.status === 200 && res.data && res.data.token) {
             setMessage({type:"success",textContent:`User ${res.data.email} successfully registered!!`})
+            login(res.data.token)
             setTimeout(()=>{
                 navigate('/dashboard')
             },2500)
@@ -56,4 +59,4 @@ setMessage({type:'error', textContent:error.response.data.message})
   )
 }
 
-export default SignIn
+export default Register

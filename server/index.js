@@ -14,7 +14,7 @@ connectDB();
 
 app.use("/users", require("./router/usersRouter"));
 // app.use("/products", require("./routes/jobsRoutes"));
-console.log('HERE');
+
 app.use(errorHandler);
 
 app.listen(port, () => console.log(`listening on port ${port}`));

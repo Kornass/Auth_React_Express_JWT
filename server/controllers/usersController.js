@@ -63,7 +63,6 @@ const register = async (req, res, next) => {
             expiresIn: "1d",
           });
           res.status(200).json({
-            type: userExist.type,
             token,
           });
         } else {

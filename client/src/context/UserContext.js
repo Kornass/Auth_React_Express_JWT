@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState } from "react";
 import * as jose from 'jose'
 
 export const UserContext = createContext()
@@ -12,13 +12,15 @@ const [currentUser, setCurrentUser] = useState({
   });
 
 const login = (token) => {
+  debugger
   let decodedToken = jose.decodeJwt(token);
-  setCurrentUser({
+  let user ={
     email:decodedToken.email,
   _id:decodedToken._id,
   token:token
-  })
-  localStorage.setItem("token", JSON.stringify(token));
+  }
+  setCurrentUser(user)
+  localStorage.setItem("user", JSON.stringify(user));
   setIsLoggedIn(true)
 }
 
