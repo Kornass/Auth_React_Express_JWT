@@ -75,9 +75,18 @@ const register = async (req, res, next) => {
     }
   }
 
+  const getCurrentUserData = async (req,res,next) => {
+    try {
+      let found = Users.findById(req._id).select("-password")
+      res.status(200).json(found);
+    } catch (error) {
+      next(error)
+    }
+  }
 
 
   module.exports = {
     register,
     login,
+    getCurrentUserData
   };
