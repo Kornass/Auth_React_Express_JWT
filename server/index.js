@@ -14,7 +14,7 @@ connectDB();
 
 app.use("/users", require("./router/usersRouter"));
 
-
+// errors going to error handler after calling next(error) in controller or throwing error with throw new Error()
 app.use(errorHandler);
 
 app.listen(port, () => console.log(`listening on port ${port}`));

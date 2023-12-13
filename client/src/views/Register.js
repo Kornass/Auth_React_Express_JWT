@@ -4,17 +4,17 @@ import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
 import { UserContext } from '../context/UserContext'
 function Register() {
-    const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
         login:'',
         email:'',
         password:'',
         password2:'',
     })
-    const [message,setMessage] = useState('')
+const [message,setMessage] = useState('')
 
-    const { login } = useContext(UserContext);
+const { login } = useContext(UserContext);
 
-    const navigate = useNavigate()
+const navigate = useNavigate()
     
 const handleChange = (e) => {
     setFormData(prevState=>({...prevState,[e.target.name]:e.target.value}))
@@ -24,20 +24,21 @@ const handleSubmit = async(e) => {
     e.preventDefault()
     try {
         let res = await axios.post(`${URL}/users/register`, formData )
-        if(res.status === 200 && res.data && res.data.token) {
+    if(res.status === 200 && res.data && res.data.token) {
             setMessage({type:"success",textContent:`User ${res.data.email} successfully registered!!`})
             login(res.data.token)
             setTimeout(()=>{
                 navigate('/dashboard')
-            },2500)
+            },2000)
         } else {
+            e.target.reset()
             setMessage({type:'error', textContent:'Something went wrong: HTTP Response corrupted!'})
         }
     } catch (error) {
-console.log(error);
-if(error.response && error.response.data && error.response.data.message) {
-setMessage({type:'error', textContent:error.response.data.message})
-}
+        console.log(error);
+        if(error.response && error.response.data && error.response.data.message) {
+            setMessage({type:'error', textContent:error.response.data.message})
+        }
 }
 }
 

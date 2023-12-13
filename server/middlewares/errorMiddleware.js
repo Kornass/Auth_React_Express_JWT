@@ -1,4 +1,5 @@
 const errorHandler = (err, req, res, next) => {
+  // if error status code not provided, set it to 500 (Internal server error)
     const statusCode = res.statusCode ? res.statusCode : 500;
     res.status(statusCode);
    

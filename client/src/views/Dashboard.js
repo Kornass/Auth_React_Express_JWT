@@ -1,4 +1,4 @@
-import {useState, useContext, useEffect} from 'react'
+import {useContext, useEffect} from 'react'
 import axios from 'axios'
 import { getRequestConfig, notAuthenticatedLogout } from '../utils/userUtils'
 import { UserContext  } from '../context/UserContext'
@@ -14,7 +14,7 @@ const config =  getRequestConfig()
 let res = await axios.get(`${URL}/users/currentUser`,config)
 if(res.status === 200 && res.data) {
   setCurrentUser(prevState => ({...prevState, login:res.data.login }))
-}
+} 
 } catch (error) {
 notAuthenticatedLogout(error, setIsLoggedIn)
 console.log(error);

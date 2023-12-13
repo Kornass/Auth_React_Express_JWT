@@ -13,7 +13,14 @@ setIsLoggedIn(false)
 }
   }
 
+  const clearMessageAsync = (setter) => {
+    setTimeout(()=>{
+      setter("")
+  },3000)
+  }
+
   module.exports = {
     getRequestConfig,
-    notAuthenticatedLogout
+    notAuthenticatedLogout,
+    clearMessageAsync
   }
