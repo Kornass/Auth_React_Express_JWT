@@ -9,7 +9,7 @@ const {isLoggedIn} = useContext(UserContext)
     <nav>
   {!isLoggedIn ? 
    <><NavLink to="/register">Register</NavLink>  
-  <NavLink to="/log-in">Log in</NavLink></> : null }
+  <NavLink to="/">Log in</NavLink></> : null }
 
 { isLoggedIn && <NavLink to="/dashboard">Dashboard</NavLink>}
     </nav>

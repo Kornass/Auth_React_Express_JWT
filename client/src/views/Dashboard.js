@@ -1,41 +1,40 @@
 import {useState, useContext, useEffect} from 'react'
 import axios from 'axios'
-import { getRequestConfig } from '../utils/userUtils'
+import { getRequestConfig, notAuthenticatedLogout } from '../utils/userUtils'
 import { UserContext  } from '../context/UserContext'
 import { URL } from '../config'
 
 function Dashboard() {
-  const [userData, setUserData] = useState(null)
 
-const {currentUser} = useContext(UserContext)
-
+const {currentUser ,setCurrentUser, setIsLoggedIn} = useContext(UserContext)
 
 const getUser = async () => {
 try {
- const config =  getRequestConfig(currentUser.token)
- debugger
-let res = axios.get(`${URL}/users/currentUser`)
-console.log(res);
+const config =  getRequestConfig()
+let res = await axios.get(`${URL}/users/currentUser`,config)
+if(res.status === 200 && res.data) {
+  setCurrentUser(prevState => ({...prevState, login:res.data.login }))
+}
 } catch (error) {
-  console.log(error);
+notAuthenticatedLogout(error, setIsLoggedIn)
+console.log(error);
 }
 }
 
 useEffect(()=>{
-  // at first render state is empty ??
- console.log(currentUser);
-},[currentUser])
+  getUser()
+},[])
 
   return (
     <div className='wrapper'>
       <h2>User data</h2>
-      {currentUser && Object.entries(currentUser).map((ele,idx)=>{
-      if(ele[0] === "token") {
-        return null
-      } 
-     return <p key={idx}>
-        <span>{ele[0]}</span><span>{ele[1]}</span>
-        </p>})}
+      {currentUser && (
+        <>
+        <p>Login: {currentUser.login}</p>
+        <p>Email: {currentUser.email}</p>
+        <p>_ID: {currentUser._id}</p>
+        </>
+      )}
     </div>
   )
 }

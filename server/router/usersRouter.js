@@ -3,7 +3,7 @@ const router = express.Router();
 const {
   register,
   login,
-
+getCurrentUserData
 } = require("../controllers/usersController");
 
 const { verify_token } = require("../middlewares/authMiddleware");

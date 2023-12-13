@@ -60,7 +60,7 @@ const register = async (req, res, next) => {
         const match = await argon2.verify(userExist.password, password);
         if (match) {
           const token = jwt.sign({ _id: userExist._id, email: userExist.email }, jwt_secret, {
-            expiresIn: "1d",
+            expiresIn: 60,
           });
           res.status(200).json({
             token,
@@ -77,8 +77,8 @@ const register = async (req, res, next) => {
 
   const getCurrentUserData = async (req,res,next) => {
     try {
-      let found = Users.findById(req._id).select("-password")
-      res.status(200).json(found);
+      let found = await Users.findById(req._id).select("-password")
+      res.status(200).send(found);
     } catch (error) {
       next(error)
     }

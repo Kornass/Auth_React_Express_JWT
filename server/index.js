@@ -13,7 +13,7 @@ app.use(cors());
 connectDB();
 
 app.use("/users", require("./router/usersRouter"));
-// app.use("/products", require("./routes/jobsRoutes"));
+
 
 app.use(errorHandler);
 

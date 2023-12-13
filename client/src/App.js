@@ -4,14 +4,13 @@ import {useContext, useEffect} from 'react'
 
 import Register from './views/Register';
 import Login from './views/Login';
-import Private from './components/Private';
 import Dashboard from './views/Dashboard';
 import Navbar from './components/Navbar';
 
 import { UserContext  } from './context/UserContext';
 
 function App() {
-
+  
 const {setCurrentUser, setIsLoggedIn, isLoggedIn} = useContext(UserContext)
 
 
@@ -20,6 +19,9 @@ let user = JSON.parse(localStorage.getItem('user'))
 if(user) {
 setCurrentUser(user)
 setIsLoggedIn(true)
+} else {
+  setIsLoggedIn(false)
+  setCurrentUser(null)
 }
 },[])
 
@@ -32,9 +34,7 @@ setIsLoggedIn(true)
       <Route path="/" element={ !isLoggedIn ? <Login /> : <Navigate to='/dashboard' />  
       } />
         <Route path="/register" element={!isLoggedIn ?<Register />:<Navigate to='/dashboard' />} />
-        <Route path="/dashboard" element={<Private />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Route>
+          <Route path="/dashboard" element={!isLoggedIn ? <Navigate to='/' /> : <Dashboard />} />
       </Routes>
     </div>
   </Router>

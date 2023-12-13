@@ -24,7 +24,6 @@ const handleSubmit = async(e) => {
     e.preventDefault()
     try {
         let res = await axios.post(`${URL}/users/register`, formData )
-        debugger
         if(res.status === 200 && res.data && res.data.token) {
             setMessage({type:"success",textContent:`User ${res.data.email} successfully registered!!`})
             login(res.data.token)

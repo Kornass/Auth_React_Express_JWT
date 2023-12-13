@@ -12,7 +12,6 @@ const [currentUser, setCurrentUser] = useState({
   });
 
 const login = (token) => {
-  debugger
   let decodedToken = jose.decodeJwt(token);
   let user ={
     email:decodedToken.email,
@@ -20,12 +19,12 @@ const login = (token) => {
   token:token
   }
   setCurrentUser(user)
-  localStorage.setItem("user", JSON.stringify(user));
   setIsLoggedIn(true)
+  localStorage.setItem("user", JSON.stringify(user));
 }
 
 const logout = () => {
-  localStorage.removeItem("token");
+  localStorage.removeItem("user");
   setIsLoggedIn(false);
 };
 
