@@ -10,6 +10,7 @@ const [formData, setFormData] = useState({
         password:'',
         password2:'',
     })
+    
 const [message,setMessage] = useState('')
 
 const { login } = useContext(UserContext);
