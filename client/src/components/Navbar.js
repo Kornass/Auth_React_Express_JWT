@@ -1,26 +1,36 @@
-import {useContext} from 'react'
-import { NavLink } from "react-router-dom";
-import { UserContext } from '../context/UserContext';
+import { useContext } from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 function Navbar() {
+  const { isLoggedIn, logout } = useContext(UserContext);
 
-const {isLoggedIn, logout} = useContext(UserContext)
+  const location = useLocation();
 
   return (
     <nav>
-{!isLoggedIn ? 
-   <>
-   <NavLink to="/register">Register</NavLink>  
-  <NavLink to="/">Log in</NavLink>
-  </> : null }
-  
-{ isLoggedIn && <>
-<NavLink to="/dashboard">Dashboard</NavLink>
-<button onClick={logout}>Log out</button>
-</>
-}
+      {!isLoggedIn ? (
+        <>
+          <NavLink
+            className={location.pathname?.includes("register") ? "active" : ""}
+            to="/register"
+          >
+            Register
+          </NavLink>
+          <NavLink className={location.pathname === "" ? "active" : ""} to="/">
+            Log in
+          </NavLink>
+        </>
+      ) : null}
+
+      {isLoggedIn && (
+        <>
+          <NavLink to="/dashboard">Dashboard</NavLink>
+          <button onClick={logout}>Log out</button>
+        </>
+      )}
     </nav>
-  )
+  );
 }
 
-export default Navbar
+export default Navbar;
