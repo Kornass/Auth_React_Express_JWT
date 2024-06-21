@@ -19,8 +19,17 @@ nav {
     color: black;
     position: relative;
   }
+  button {
+    border: none;
+    background-color: transparent;
+  }
+  button:hover {
+    background-color: transparent;
+    color: black;
+  }
 }
-nav a::after {
+nav a::after,
+nav button::after {
   content: "";
   position: absolute;
   width: 100%;
@@ -31,17 +40,17 @@ nav a::after {
   background-color: black;
   transition: transform 0.25s ease-out;
 }
-.active::after {
-  transform: scaleX(1);
-}
-nav a:hover::after {
+nav a:hover::after,
+nav button:hover::after {
   transform: scaleX(1);
   transform-origin: center;
 }
 nav a:hover {
   transform: scale(1.05);
 }
-
+.active::after {
+  transform: scaleX(1);
+}
 form {
   background-color: white;
   display: flex;
@@ -73,7 +82,7 @@ form {
   }
 }
 button:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
   transition: 0.5s;
   background-color: #aba8a4;
   color: white;

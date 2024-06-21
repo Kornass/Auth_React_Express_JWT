@@ -8,9 +8,6 @@ const userSchema = new mongoose.Schema({
     unique: true,
   },
   password: { type: String, required: true },
-  location:{ type: String },
-  gender:{ type: String },
-
 });
 
 module.exports = mongoose.model("users", userSchema);

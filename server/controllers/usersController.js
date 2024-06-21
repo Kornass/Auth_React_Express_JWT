@@ -1,5 +1,5 @@
 const Users = require("../schemas/userSchema");
-const argon2 = require("argon2");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const validator = require("validator");
 
@@ -15,11 +15,10 @@ const register = async (req, res, next) => {
     }
     const specialCharacters = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     if (!password.match(/[A-Z]/g) || !specialCharacters.test(password)) {
-      res.json({
-        ok: false,
-        message:
-          "Password need to contain at least 1 uppercase letter and 1 special character !!",
-      });
+      res.status(400);
+      throw new Error(
+        "Password need to contain at least 1 uppercase letter and 1 special character !!"
+      );
     }
     if (password !== password2) {
       res.status(400);
@@ -34,7 +33,8 @@ const register = async (req, res, next) => {
       res.status(400);
       throw new Error("User with this email adress already exist!!");
     }
-    const hash = await argon2.hash(password, salt);
+    const salt = bcrypt.genSaltSync(salt);
+    const hash = bcrypt.hashSync(password, salt);
     let createdUser = await Users.create({
       login,
       email,
@@ -59,13 +59,13 @@ const login = async (req, res, next) => {
       res.status(401);
       throw new Error("Invalid credentials. User doesn't exist");
     } else {
-      const match = await argon2.verify(userExist.password, password);
+      const match = bcrypt.compareSync(userExist.password, password);
       if (match) {
         const token = jwt.sign(
           { _id: userExist._id, email: userExist.email },
           jwt_secret,
           {
-            expiresIn: "1d",
+            expiresIn: 90,
           }
         );
         res.status(200).json({

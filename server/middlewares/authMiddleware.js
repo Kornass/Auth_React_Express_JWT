@@ -11,6 +11,7 @@ const verify_token = (req, res, next) => {
       res.status(401);
       throw new Error("Not authorized!! - Token not validated!!");
     } else {
+      // if successfully verified - user data in varified parameter
       req._id = verified._id;
       req.token = token;
       next();
