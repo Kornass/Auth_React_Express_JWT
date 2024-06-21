@@ -33,8 +33,8 @@ const register = async (req, res, next) => {
       res.status(400);
       throw new Error("User with this email adress already exist!!");
     }
-    const salt = bcrypt.genSaltSync(salt);
-    const hash = bcrypt.hashSync(password, salt);
+    const salted = bcrypt.genSaltSync(salt);
+    const hash = bcrypt.hashSync(password, salted);
     let createdUser = await Users.create({
       login,
       email,
