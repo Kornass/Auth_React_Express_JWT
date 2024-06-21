@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { URL } from "../config";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
+import { AuthContext } from "../context/AuthContext";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -14,7 +14,7 @@ function Register() {
 
   const [message, setMessage] = useState("");
 
-  const { login } = useContext(UserContext);
+  const { login } = useContext(AuthContext);
 
   const navigate = useNavigate();
 

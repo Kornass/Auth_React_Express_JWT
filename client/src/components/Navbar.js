@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
+import { AuthContext } from "../context/AuthContext";
 
 function Navbar() {
-  const { isLoggedIn, logout } = useContext(UserContext);
+  const { isLoggedIn, logout } = useContext(AuthContext);
 
   const location = useLocation();
 
