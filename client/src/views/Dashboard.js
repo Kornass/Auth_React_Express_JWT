@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import axios from "axios";
+import axios from "../api/axios";
 import { getRequestConfig, notAuthenticatedLogout } from "../utils/userUtils";
 import { AuthContext } from "../context/AuthContext";
 import { URL } from "../config";
@@ -11,7 +11,7 @@ function Dashboard() {
   const getUser = async () => {
     try {
       const config = getRequestConfig();
-      let res = await axios.get(`${URL}/users/currentUser`, config);
+      let res = await axios.get(`/users/currentUser`, config);
       if (res.status === 200 && res.data) {
         setCurrentUser((prevState) => ({
           ...prevState,

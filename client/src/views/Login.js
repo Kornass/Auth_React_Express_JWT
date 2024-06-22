@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { URL } from "../config";
-import axios from "axios";
+import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { clearMessageAsync } from "../utils/userUtils";
@@ -26,7 +26,7 @@ function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      let res = await axios.post(`${URL}/users/login`, formData);
+      let res = await axios.post(`/users/login`, formData);
       if (res.status === 200 && res.data && res.data.token) {
         setMessage({
           type: "success",

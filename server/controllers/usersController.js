@@ -4,7 +4,6 @@ const jwt = require("jsonwebtoken");
 const validator = require("validator");
 
 const jwt_secret = process.env.JWT_SECRET;
-const salt = process.env.SALT;
 
 const register = async (req, res, next) => {
   const { password, password2, email, login } = req.body;
@@ -33,7 +32,7 @@ const register = async (req, res, next) => {
       res.status(400);
       throw new Error("User with this email adress already exist!!");
     }
-    const salted = bcrypt.genSaltSync(salt);
+    const salted = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salted);
     let createdUser = await Users.create({
       login,
@@ -59,7 +58,7 @@ const login = async (req, res, next) => {
       res.status(401);
       throw new Error("Invalid credentials. User doesn't exist");
     } else {
-      const match = bcrypt.compareSync(userExist.password, password);
+      const match = bcrypt.compareSync(password, userExist.password);
       if (match) {
         const token = jwt.sign(
           { _id: userExist._id, email: userExist.email },
