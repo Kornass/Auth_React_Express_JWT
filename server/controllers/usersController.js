@@ -85,6 +85,7 @@ const getCurrentUserData = async (req, res, next) => {
     let found = await Users.findById(req._id).select("-password");
     res.status(200).send(found);
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

@@ -1,26 +1,29 @@
 const getRequestConfig = () => {
-    return {
-      headers: {
-        Authorization: JSON.parse(localStorage.getItem('user'))?.token,
-      },
-    };
+  return {
+    headers: {
+      Authorization: JSON.parse(localStorage.getItem("user"))?.token,
+    },
   };
+};
 
-  const notAuthenticatedLogout = (error, setIsLoggedIn) => {
-if(error?.response?.status === 401) {
-  localStorage.removeItem("user")
-setIsLoggedIn(false)
-}
+const notAuthenticatedLogout = (error, setIsLoggedIn, setMessage) => {
+  if (error?.response?.status === 401) {
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+    if (error.response && error.response.data.message) {
+      setMessage({ type: "error", textContent: error.response.data.message });
+    }
   }
+};
 
-  const clearMessageAsync = (setter) => {
-    setTimeout(()=>{
-      setter("")
-  },3000)
-  }
+const clearMessageAsync = (setMessage) => {
+  setTimeout(() => {
+    setMessage("");
+  }, 3000);
+};
 
-  module.exports = {
-    getRequestConfig,
-    notAuthenticatedLogout,
-    clearMessageAsync
-  }
+module.exports = {
+  getRequestConfig,
+  notAuthenticatedLogout,
+  clearMessageAsync,
+};

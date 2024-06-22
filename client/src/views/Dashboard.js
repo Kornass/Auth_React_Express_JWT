@@ -1,26 +1,25 @@
 import { useContext, useEffect } from "react";
 import axios from "../api/axios";
-import { getRequestConfig, notAuthenticatedLogout } from "../utils/userUtils";
+import { notAuthenticatedLogout } from "../utils/userUtils";
 import { AuthContext } from "../context/AuthContext";
-import { URL } from "../config";
+import { clearMessageAsync } from "../utils/userUtils";
 
 function Dashboard() {
-  const { currentUser, setCurrentUser, setIsLoggedIn } =
+  const { currentUser, setCurrentUser, setIsLoggedIn, setMessage } =
     useContext(AuthContext);
 
   const getUser = async () => {
     try {
-      const config = getRequestConfig();
-      let res = await axios.get(`/users/currentUser`, config);
-      if (res.status === 200 && res.data) {
+      let res = await axios.get(`/users/currentUser`);
+      if (res.status === 200) {
         setCurrentUser((prevState) => ({
           ...prevState,
           login: res.data.login,
         }));
       }
     } catch (error) {
-      notAuthenticatedLogout(error, setIsLoggedIn);
-      console.log(error);
+      notAuthenticatedLogout(error, setIsLoggedIn, setMessage);
+      clearMessageAsync(setMessage);
     }
   };
 

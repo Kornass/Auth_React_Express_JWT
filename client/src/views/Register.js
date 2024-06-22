@@ -1,5 +1,4 @@
 import { useState, useContext } from "react";
-import { URL } from "../config";
 import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -12,9 +11,7 @@ function Register() {
     password2: "",
   });
 
-  const [message, setMessage] = useState("");
-
-  const { login } = useContext(AuthContext);
+  const { login, message, setMessage } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -30,7 +27,7 @@ function Register() {
     e.preventDefault();
     try {
       let res = await axios.post(`/users/register`, formData);
-      if (res.status === 200 && res.data && res.data.token) {
+      if (res.status === 200 && res.data.token) {
         setMessage({
           type: "success",
           textContent: `User ${res.data.email} successfully registered!!`,
@@ -47,12 +44,7 @@ function Register() {
         });
       }
     } catch (error) {
-      console.log(error);
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
+      if (error.response && error.response.data.message) {
         setMessage({ type: "error", textContent: error.response.data.message });
       }
     }
@@ -91,11 +83,11 @@ function Register() {
       <button>Sign in!</button>
       <p
         style={{
-          color: message.type === "error" ? "red" : "green",
+          color: message?.type === "error" ? "red" : "green",
           fontWeight: "bold",
         }}
       >
-        {message.textContent}
+        {message && message.textContent}
       </p>
     </form>
   );

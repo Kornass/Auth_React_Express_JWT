@@ -1,5 +1,4 @@
 import { useState, useContext } from "react";
-import { URL } from "../config";
 import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -10,9 +9,8 @@ function SignUp() {
     email: "",
     password: "",
   });
-  const [message, setMessage] = useState("");
 
-  const { login } = useContext(AuthContext);
+  const { login, message, setMessage } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -27,7 +25,7 @@ function SignUp() {
     e.preventDefault();
     try {
       let res = await axios.post(`/users/login`, formData);
-      if (res.status === 200 && res.data && res.data.token) {
+      if (res.status === 200 && res.data.token) {
         setMessage({
           type: "success",
           textContent: `Welcome back ${res.data.email} !!`,
@@ -46,11 +44,7 @@ function SignUp() {
       }
     } catch (error) {
       console.log(error);
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
+      if (error.response && error.response.data.message) {
         setMessage({ type: "error", textContent: error.response.data.message });
       }
       clearMessageAsync(setMessage);
@@ -76,11 +70,11 @@ function SignUp() {
       <button>Log in!</button>
       <p
         style={{
-          color: message.type === "error" ? "red" : "green",
+          color: message?.type === "error" ? "red" : "green",
           fontWeight: "bold",
         }}
       >
-        {message.textContent}
+        {message && message.textContent}
       </p>
     </form>
   );

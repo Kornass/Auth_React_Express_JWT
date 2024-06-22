@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
     email: "",
     token: "",
   });
+  const [message, setMessage] = useState(null);
 
   const login = (token) => {
     let decodedToken = jose.decodeJwt(token);
@@ -37,6 +38,8 @@ export const AuthProvider = ({ children }) => {
         currentUser,
         login,
         logout,
+        message,
+        setMessage,
       }}
     >
       {children}
