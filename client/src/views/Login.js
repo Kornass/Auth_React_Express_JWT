@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -13,6 +13,7 @@ function SignUp() {
   const { login, message, setMessage } = useContext(AuthContext);
 
   const navigate = useNavigate();
+  const messageRef = useRef(null);
 
   const handleChange = (e) => {
     setFormData((prevState) => ({
@@ -34,22 +35,32 @@ function SignUp() {
         setTimeout(() => {
           navigate("/dashboard");
         }, 2000);
+        messageRef.current = clearMessageAsync(setMessage);
       } else {
         e.target.reset();
         setMessage({
           type: "error",
           textContent: "Something went wrong: HTTP Response corrupted!",
         });
-        clearMessageAsync(setMessage);
+        messageRef.current = clearMessageAsync(setMessage);
       }
     } catch (error) {
       console.log(error);
       if (error.response && error.response.data.message) {
         setMessage({ type: "error", textContent: error.response.data.message });
       }
-      clearMessageAsync(setMessage);
+      messageRef.current = clearMessageAsync(setMessage);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (messageRef.current) {
+        clearTimeout(messageRef.current);
+        setMessage(null);
+      }
+    };
+  }, []);
 
   return (
     <form onSubmit={handleSubmit}>

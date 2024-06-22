@@ -17,7 +17,7 @@ const notAuthenticatedLogout = (error, setIsLoggedIn, setMessage) => {
 };
 
 const clearMessageAsync = (setMessage) => {
-  setTimeout(() => {
+  return setTimeout(() => {
     setMessage("");
   }, 3000);
 };

@@ -69,6 +69,7 @@ const login = async (req, res, next) => {
         );
         res.status(200).json({
           token,
+          email,
         });
       } else {
         res.status(400);
