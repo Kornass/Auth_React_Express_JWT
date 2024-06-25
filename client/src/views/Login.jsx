@@ -18,7 +18,7 @@ function SignUp() {
   const handleChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [e.target.id]: e.target.value,
     }));
   };
 
@@ -64,16 +64,16 @@ function SignUp() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>Email</label>
+      <label for="email">Email</label>
       <input
-        name="email"
+        id="email"
         onChange={handleChange}
         required
         value={formData.email}
       />
-      <label>Password</label>
+      <label for="password">Password</label>
       <input
-        name="password"
+        id="password"
         onChange={handleChange}
         required
         value={formData.password}

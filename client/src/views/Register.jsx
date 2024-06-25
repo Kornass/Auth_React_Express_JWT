@@ -18,7 +18,7 @@ function Register() {
   const handleChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [e.target.id]: e.target.value,
     }));
   };
 
@@ -52,30 +52,30 @@ function Register() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>Login</label>
+      <label for="login">Login</label>
       <input
-        name="login"
+        id="login"
         onChange={handleChange}
         required
         value={formData.login}
       />
-      <label>Email</label>
+      <label for="email">Email</label>
       <input
-        name="email"
+        id="email"
         onChange={handleChange}
         required
         value={formData.email}
       />
-      <label>Password</label>
+      <label for="password">Password</label>
       <input
-        name="password"
+        id="password"
         onChange={handleChange}
         required
         value={formData.password}
       />
-      <label>Repeat password</label>
+      <label for="password2">Repeat password</label>
       <input
-        name="password2"
+        id="password2"
         onChange={handleChange}
         required
         value={formData.password2}
