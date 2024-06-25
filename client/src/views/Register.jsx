@@ -1,19 +1,19 @@
-import { useState, useContext, useEffect, useRef } from "react";
+import { useState, useContext } from "react";
 import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { clearMessageAsync } from "../utils/userUtils";
 
-function SignUp() {
+function Register() {
   const [formData, setFormData] = useState({
+    login: "",
     email: "",
     password: "",
+    password2: "",
   });
 
   const { login, message, setMessage } = useContext(AuthContext);
 
   const navigate = useNavigate();
-  const messageRef = useRef(null);
 
   const handleChange = (e) => {
     setFormData((prevState) => ({
@@ -23,47 +23,42 @@ function SignUp() {
   };
 
   const handleSubmit = async (e) => {
+    debugger;
     e.preventDefault();
     try {
-      let res = await axios.post(`/users/login`, formData);
+      let res = await axios.post(`/users/register`, formData);
       if (res.status === 200 && res.data.token) {
         setMessage({
           type: "success",
-          textContent: `Welcome back ${res.data.email} !!`,
+          textContent: `User ${res.data.email} successfully registered!!`,
         });
         login(res.data.token);
         setTimeout(() => {
           navigate("/dashboard");
         }, 2000);
-        messageRef.current = clearMessageAsync(setMessage);
       } else {
         e.target.reset();
         setMessage({
           type: "error",
           textContent: "Something went wrong: HTTP Response corrupted!",
         });
-        messageRef.current = clearMessageAsync(setMessage);
       }
     } catch (error) {
-      console.log(error);
       if (error.response && error.response.data.message) {
         setMessage({ type: "error", textContent: error.response.data.message });
       }
-      messageRef.current = clearMessageAsync(setMessage);
     }
   };
 
-  useEffect(() => {
-    return () => {
-      if (messageRef.current) {
-        clearTimeout(messageRef.current);
-        setMessage(null);
-      }
-    };
-  }, []);
-
   return (
     <form onSubmit={handleSubmit}>
+      <label>Login</label>
+      <input
+        name="login"
+        onChange={handleChange}
+        required
+        value={formData.login}
+      />
       <label>Email</label>
       <input
         name="email"
@@ -78,7 +73,14 @@ function SignUp() {
         required
         value={formData.password}
       />
-      <button>Log in!</button>
+      <label>Repeat password</label>
+      <input
+        name="password2"
+        onChange={handleChange}
+        required
+        value={formData.password2}
+      />
+      <button type="submit">Sign in!</button>
       <p
         style={{
           color: message?.type === "error" ? "red" : "green",
@@ -91,4 +93,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default Register;
