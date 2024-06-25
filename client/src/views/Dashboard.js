@@ -10,9 +10,9 @@ function Dashboard() {
 
   const getUser = async () => {
     try {
-      // axios.defaults.headers.common["Authorization"] = JSON.parse(
-      //   localStorage.getItem("user")
-      // )?.token;
+      axios.defaults.headers.common["Authorization"] = JSON.parse(
+        localStorage.getItem("user")
+      )?.token;
       let res = await axios.get(`/users/currentUser`);
       if (res.status === 200) {
         setCurrentUser((prevState) => ({
