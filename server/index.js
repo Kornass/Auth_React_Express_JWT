@@ -3,12 +3,14 @@ const app = express();
 const cors = require("cors");
 const port = process.env.PORT || 4040;
 require("dotenv").config();
-const connectDB = require("./config/db");
+const connectDB = require("./db/db");
 const { errorHandler } = require("./middlewares/errorMiddleware");
+const cookieParser = require("cookie-parser");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(cookieParser());
 
 app.use("/users", require("./router/usersRouter"));
 

@@ -26,12 +26,12 @@ function SignUp() {
     e.preventDefault();
     try {
       let res = await axios.post(`/users/login`, formData);
-      if (res.status === 200 && res.data.token) {
+      if (res.status === 200 && res.data.accessToken) {
         setMessage({
           type: "success",
           textContent: `Welcome back ${res.data.email} !!`,
         });
-        login(res.data.token);
+        login(res.data.accessToken);
         setTimeout(() => {
           navigate("/dashboard");
         }, 2000);
@@ -45,7 +45,6 @@ function SignUp() {
         messageRef.current = clearMessageAsync(setMessage);
       }
     } catch (error) {
-      console.log(error);
       if (error.response && error.response.data.message) {
         setMessage({ type: "error", textContent: error.response.data.message });
       }
@@ -64,14 +63,14 @@ function SignUp() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label for="email">Email</label>
+      <label htmlFor="email">Email</label>
       <input
         id="email"
         onChange={handleChange}
         required
         value={formData.email}
       />
-      <label for="password">Password</label>
+      <label htmlFor="password">Password</label>
       <input
         id="password"
         onChange={handleChange}

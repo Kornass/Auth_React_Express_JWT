@@ -27,12 +27,12 @@ function Register() {
     e.preventDefault();
     try {
       let res = await axios.post(`/users/register`, formData);
-      if (res.status === 200 && res.data.token) {
+      if (res.status === 200 && res.data.accessToken) {
         setMessage({
           type: "success",
           textContent: `User ${res.data.email} successfully registered!!`,
         });
-        login(res.data.token);
+        login(res.data.accessToken);
         setTimeout(() => {
           navigate("/dashboard");
         }, 2000);
@@ -52,28 +52,28 @@ function Register() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label for="login">Login</label>
+      <label htmlFor="login">Login</label>
       <input
         id="login"
         onChange={handleChange}
         required
         value={formData.login}
       />
-      <label for="email">Email</label>
+      <label htmlFor="email">Email</label>
       <input
         id="email"
         onChange={handleChange}
         required
         value={formData.email}
       />
-      <label for="password">Password</label>
+      <label htmlFor="password">Password</label>
       <input
         id="password"
         onChange={handleChange}
         required
         value={formData.password}
       />
-      <label for="password2">Repeat password</label>
+      <label htmlFor="password2">Repeat password</label>
       <input
         id="password2"
         onChange={handleChange}

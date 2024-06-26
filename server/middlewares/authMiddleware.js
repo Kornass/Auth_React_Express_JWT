@@ -6,13 +6,13 @@ const verify_token = (req, res, next) => {
     res.status(401);
     throw new Error("Not authorized!! - No token!!");
   }
-  jwt.verify(token, process.env.JWT_SECRET, (err, verified) => {
+  jwt.verify(token, process.env.JWT_SECRET_ACCESS, (err, user) => {
     if (err) {
-      res.status(401);
+      res.status(403);
       throw new Error("Not authorized!! - Token not validated!!");
     } else {
-      // if successfully verified - user data in varified parameter
-      req._id = verified._id;
+      // if successfully verified - user data in verified parameter
+      req._id = user._id;
       req.token = token;
       next();
     }

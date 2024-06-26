@@ -20,6 +20,7 @@ nav {
     position: relative;
   }
   button {
+    font-size: inherit;
     border: none;
     background-color: transparent;
   }
