@@ -1,19 +1,52 @@
 import { useContext, useEffect } from "react";
-import axios from "../api/axios";
-import { notAuthenticatedLogout } from "../utils/userUtils";
+import { axiosPublic } from "../api/axiosPublic";
+import { axiosAuth } from "../api/axiosJWT";
 import { AuthContext } from "../context/AuthContext";
+import { notAuthenticatedLogout } from "../utils/userUtils";
 import { clearMessageAsync } from "../utils/userUtils";
+import { jwtDecode } from "jwt-decode";
 
 function Dashboard() {
-  const { currentUser, setCurrentUser, setIsLoggedIn, setMessage } =
+  const { currentUser, setCurrentUser, setIsLoggedIn, setMessage, login } =
     useContext(AuthContext);
+
+  axiosAuth.interceptors.request.use(
+    async (config) => {
+      console.log("interceptor", currentUser);
+      const currentDate = new Date();
+      const decodedToken = jwtDecode(currentUser.token);
+      if (decodedToken.exp * 1000 < currentDate.getTime()) {
+        console.log("REFRESH!");
+        const data = await refreshToken();
+        config.headers["Authorization"] = data.accessToken;
+      } else {
+        config.headers["Authorization"] = currentUser.token;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
+  const refreshToken = async () => {
+    try {
+      debugger;
+      let res = await axiosPublic.post(
+        `/users/refreshToken/${currentUser._id}`
+      );
+      if (res.status === 200 && res.data.accessToken) {
+        login(res.data.accessToken);
+      }
+    } catch (error) {
+      notAuthenticatedLogout(error, setIsLoggedIn, setMessage);
+      clearMessageAsync(setMessage);
+    }
+  };
 
   const getUser = async () => {
     try {
-      axios.defaults.headers.common["Authorization"] = JSON.parse(
-        localStorage.getItem("user")
-      )?.token;
-      let res = await axios.get(`/users/currentUser`);
+      let res = await axiosAuth.get(`/users/currentUser`);
       if (res.status === 200) {
         setCurrentUser((prevState) => ({
           ...prevState,
@@ -28,6 +61,7 @@ function Dashboard() {
 
   useEffect(() => {
     getUser();
+    // eslint-disable-next-line
   }, []);
 
   return (

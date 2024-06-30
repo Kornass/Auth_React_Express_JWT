@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect, useRef } from "react";
-import axios from "../api/axios";
+import { axiosPublic } from "../api/axiosPublic";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { clearMessageAsync } from "../utils/userUtils";
@@ -25,7 +25,7 @@ function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      let res = await axios.post(`/users/login`, formData);
+      let res = await axiosPublic.post(`/users/login`, formData);
       if (res.status === 200 && res.data.accessToken) {
         setMessage({
           type: "success",
@@ -59,6 +59,7 @@ function SignUp() {
         setMessage(null);
       }
     };
+    // eslint-disable-next-line
   }, []);
 
   return (

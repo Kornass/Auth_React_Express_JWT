@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import axios from "../api/axios";
+import { axiosPublic } from "../api/axiosPublic";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
@@ -26,7 +26,7 @@ function Register() {
     debugger;
     e.preventDefault();
     try {
-      let res = await axios.post(`/users/register`, formData);
+      let res = await axiosPublic.post(`/users/register`, formData);
       if (res.status === 200 && res.data.accessToken) {
         setMessage({
           type: "success",

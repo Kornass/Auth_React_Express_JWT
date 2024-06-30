@@ -23,13 +23,16 @@ function App() {
       setCurrentUser(user);
       setIsLoggedIn(true);
     } else {
+      debugger;
       setIsLoggedIn(false);
       setCurrentUser(null);
     }
+    // eslint-disable-next-line
   }, []);
 
   return (
     <Router>
+      {console.log("APP", isLoggedIn)}
       <Navbar />
       <div className="app">
         <Routes>
