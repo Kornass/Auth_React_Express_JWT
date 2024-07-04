@@ -12,11 +12,9 @@ function Dashboard() {
 
   axiosAuth.interceptors.request.use(
     async (config) => {
-      console.log("interceptor", currentUser);
       const currentDate = new Date();
       const decodedToken = jwtDecode(currentUser.token);
       if (decodedToken.exp * 1000 < currentDate.getTime()) {
-        console.log("REFRESH!");
         const data = await refreshToken();
         config.headers["Authorization"] = data.accessToken;
       } else {
@@ -31,12 +29,12 @@ function Dashboard() {
 
   const refreshToken = async () => {
     try {
-      debugger;
       let res = await axiosPublic.post(
         `/users/refreshToken/${currentUser._id}`
       );
       if (res.status === 200 && res.data.accessToken) {
         login(res.data.accessToken);
+        return res.data;
       }
     } catch (error) {
       notAuthenticatedLogout(error, setIsLoggedIn, setMessage);
@@ -72,6 +70,7 @@ function Dashboard() {
           <p>Login: {currentUser.login}</p>
           <p>Email: {currentUser.email}</p>
           <p>_ID: {currentUser._id}</p>
+          <p>access token: {currentUser.token}</p>
         </>
       )}
     </div>

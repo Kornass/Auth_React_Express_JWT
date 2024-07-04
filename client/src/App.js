@@ -32,7 +32,6 @@ function App() {
 
   return (
     <Router>
-      {console.log("APP", isLoggedIn)}
       <Navbar />
       <div className="app">
         <Routes>

@@ -71,13 +71,12 @@ const login = async (req, res, next) => {
         const refreshToken = generateRefreshToken(tokenData);
         userExist.refreshToken = refreshToken;
         await userExist.save();
-        //! RESPONSE, DB OR COOKIES ?
-        // res.cookie("refresh", refreshToken, {
-        //   httpOnly: true,
-        //   secure: true,
-        //   sameSite: "Strict",
-        //   maxAge: 604800000, // 7 days
-        // });
+        res.cookie("refreshToken", refreshToken, {
+          httpOnly: true,
+          secure: false,
+          sameSite: "Strict",
+          maxAge: 86400000, // 1 day
+        });
         res.status(200).json({
           accessToken,
           email,
@@ -103,9 +102,8 @@ const getCurrentUserData = async (req, res, next) => {
 
 const refreshToken = async (req, res, next) => {
   try {
-    //! RESPONSE, DB OR COOKIES ?
-
-    const { refreshToken } = req.body;
+    const { refreshToken } = req.cookies;
+    const { id: _id } = req.params;
 
     if (!refreshToken) {
       res.status(401);
@@ -116,11 +114,22 @@ const refreshToken = async (req, res, next) => {
 
     const foundUser = await Users.findById(user._id);
     if (!foundUser) {
-      res.status(403).send("No user with this ID!!");
+      res
+        .status(403)
+        .send("Not authorized!! - No user with this ID from refresh token!!");
     }
 
+    if (user._id !== _id) {
+      res
+        .status(403)
+        .send(
+          "Not authorized!! - This token doesn't belong to the user that sent a request !"
+        );
+    }
+    console.log("TOKEN FROM DB", foundUser.refreshToken);
+    console.log("Token from request", refreshToken);
     if (foundUser.refreshToken !== refreshToken) {
-      res.status(403).send("Wrong refresh token !!");
+      res.status(403).send("Not authorized!! - Invalid refresh token !!");
     } else {
       const tokenData = {
         _id: foundUser._id,
@@ -132,9 +141,15 @@ const refreshToken = async (req, res, next) => {
 
       foundUser.refreshToken = newRefreshToken;
       await foundUser.save();
-
+      res.cookie("refreshToken", newRefreshToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "Strict",
+        maxAge: 86400000, // 1 day
+      });
       res.status(200).json({
-        newAccessToken,
+        _id: foundUser._id,
+        accessToken: newAccessToken,
         email: foundUser.email,
       });
     }
@@ -143,9 +158,22 @@ const refreshToken = async (req, res, next) => {
   }
 };
 
+// const logout = async (req, res, next) => {
+//   try {
+//     const deleteToken = Users.findByIdAndUpdate(
+//       { _id: req._id },
+//       { refreshToken: "" }
+//     );
+//     res.status(200).json("You logged out successfully!");
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
 module.exports = {
   register,
   login,
   getCurrentUserData,
   refreshToken,
+  // logout,
 };

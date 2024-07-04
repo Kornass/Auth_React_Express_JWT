@@ -12,8 +12,6 @@ export const AuthProvider = ({ children }) => {
   });
   const [message, setMessage] = useState(null);
 
-  console.log("USER FROM CONTEXT", currentUser);
-
   const login = (token) => {
     let decodedToken = jwtDecode(token);
     let user = {
@@ -27,6 +25,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    debugger;
     localStorage.removeItem("user");
     setIsLoggedIn(false);
   };

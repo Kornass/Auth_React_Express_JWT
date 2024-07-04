@@ -3,7 +3,7 @@ const { JWT_SECRET_ACCESS, JWT_SECRET_REFRESH } = process.env;
 
 const generateAccessToken = (data) => {
   return jwt.sign({ ...data }, JWT_SECRET_ACCESS, {
-    expiresIn: 90,
+    expiresIn: "1m",
   });
 };
 
