@@ -126,8 +126,7 @@ const refreshToken = async (req, res, next) => {
           "Not authorized!! - This token doesn't belong to the user that sent a request !"
         );
     }
-    console.log("TOKEN FROM DB", foundUser.refreshToken);
-    console.log("Token from request", refreshToken);
+
     if (foundUser.refreshToken !== refreshToken) {
       res.status(403).send("Not authorized!! - Invalid refresh token !!");
     } else {
@@ -158,22 +157,34 @@ const refreshToken = async (req, res, next) => {
   }
 };
 
-// const logout = async (req, res, next) => {
-//   try {
-//     const deleteToken = Users.findByIdAndUpdate(
-//       { _id: req._id },
-//       { refreshToken: "" }
-//     );
-//     res.status(200).json("You logged out successfully!");
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+const logout = async (req, res, next) => {
+  try {
+    const deleteToken = await Users.findByIdAndUpdate(
+      { _id: req._id },
+      { refreshToken: "" }
+    );
+    if (deleteToken) {
+      res.cookie("refreshToken", "", {
+        expires: new Date(0),
+        httpOnly: true,
+        secure: false,
+        sameSite: "Strict",
+      });
+      res.status(200).json({ ok: true });
+    } else {
+      res
+        .status(403)
+        .send("Something went wrong when reseting refresh token!!");
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   register,
   login,
   getCurrentUserData,
   refreshToken,
-  // logout,
+  logout,
 };

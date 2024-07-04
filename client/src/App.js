@@ -23,7 +23,6 @@ function App() {
       setCurrentUser(user);
       setIsLoggedIn(true);
     } else {
-      debugger;
       setIsLoggedIn(false);
       setCurrentUser(null);
     }

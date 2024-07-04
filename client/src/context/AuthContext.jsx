@@ -1,5 +1,7 @@
 import React, { createContext, useState } from "react";
 import { jwtDecode } from "jwt-decode";
+import { axiosAuth } from "../api/axiosJWT";
+import { clearMessageAsync } from "../utils/userUtils";
 
 export const AuthContext = createContext();
 
@@ -24,10 +26,22 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(user));
   };
 
-  const logout = () => {
-    debugger;
-    localStorage.removeItem("user");
-    setIsLoggedIn(false);
+  const logout = async () => {
+    try {
+      axiosAuth.defaults.headers["Authorization"] = currentUser.token;
+      let res = await axiosAuth.post("users/logout");
+      if (res.data.ok) {
+        localStorage.removeItem("user");
+        setIsLoggedIn(false);
+        setMessage({
+          type: "success",
+          textContent: `Logged out !!`,
+        });
+        clearMessageAsync(setMessage);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
