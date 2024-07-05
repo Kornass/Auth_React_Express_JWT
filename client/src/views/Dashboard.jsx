@@ -44,9 +44,9 @@ function Dashboard() {
     }
   };
 
-  const getUser = async () => {
+  const getUser = async (signal) => {
     try {
-      const res = await axiosAuth.get(`/users/currentUser`);
+      const res = await axiosAuth.get(`/users/currentUser`, { signal });
       if (res.status === 200) {
         setCurrentUser((prevState) => ({
           ...prevState,
@@ -60,7 +60,11 @@ function Dashboard() {
   };
 
   useEffect(() => {
-    getUser();
+    const controller = new AbortController();
+    getUser(controller.signal);
+    return () => {
+      controller.abort();
+    };
     // eslint-disable-next-line
   }, []);
 

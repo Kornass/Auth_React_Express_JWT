@@ -14,7 +14,8 @@ import Navbar from "./components/Navbar";
 import { AuthContext } from "./context/AuthContext";
 
 function App() {
-  const { setCurrentUser, setIsLoggedIn, isLoggedIn } = useContext(AuthContext);
+  const { setCurrentUser, setIsLoggedIn, isLoggedIn, currentUser } =
+    useContext(AuthContext);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
