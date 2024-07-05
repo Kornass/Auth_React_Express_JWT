@@ -140,6 +140,7 @@ const refreshToken = async (req, res, next) => {
 
       foundUser.refreshToken = newRefreshToken;
       await foundUser.save();
+
       res.cookie("refreshToken", newRefreshToken, {
         httpOnly: true,
         secure: false,

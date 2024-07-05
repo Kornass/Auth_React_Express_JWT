@@ -7,8 +7,10 @@ import { clearMessageAsync } from "../utils/userUtils";
 import { jwtDecode } from "jwt-decode";
 
 function Dashboard() {
-  const { currentUser, setCurrentUser, setIsLoggedIn, setMessage, login } =
+  const { currentUser, setCurrentUser, setIsLoggedIn, setMessage, loginUser } =
     useContext(AuthContext);
+
+  const { login, email, _id, token } = currentUser;
 
   axiosAuth.interceptors.request.use(
     async (config) => {
@@ -29,11 +31,11 @@ function Dashboard() {
 
   const refreshToken = async () => {
     try {
-      let res = await axiosPublic.post(
+      const res = await axiosPublic.post(
         `/users/refreshToken/${currentUser._id}`
       );
       if (res.status === 200 && res.data.accessToken) {
-        login(res.data.accessToken);
+        loginUser(res.data.accessToken);
         return res.data;
       }
     } catch (error) {
@@ -44,7 +46,7 @@ function Dashboard() {
 
   const getUser = async () => {
     try {
-      let res = await axiosAuth.get(`/users/currentUser`);
+      const res = await axiosAuth.get(`/users/currentUser`);
       if (res.status === 200) {
         setCurrentUser((prevState) => ({
           ...prevState,
@@ -67,10 +69,10 @@ function Dashboard() {
       <h2>User data</h2>
       {currentUser && (
         <>
-          <p>Login: {currentUser.login}</p>
-          <p>Email: {currentUser.email}</p>
-          <p>_ID: {currentUser._id}</p>
-          <p>access token: {currentUser.token}</p>
+          <p>Login: {login}</p>
+          <p>Email: {email}</p>
+          <p>_ID: {_id}</p>
+          <p>access token: {token}</p>
         </>
       )}
     </div>

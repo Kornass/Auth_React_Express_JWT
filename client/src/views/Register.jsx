@@ -11,7 +11,7 @@ function Register() {
     password2: "",
   });
 
-  const { login, message, setMessage } = useContext(AuthContext);
+  const { loginUser, message, setMessage } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -23,16 +23,15 @@ function Register() {
   };
 
   const handleSubmit = async (e) => {
-    debugger;
     e.preventDefault();
     try {
       let res = await axiosPublic.post(`/users/register`, formData);
       if (res.status === 200 && res.data.accessToken) {
+        loginUser(res.data.accessToken);
         setMessage({
           type: "success",
           textContent: `User ${res.data.email} successfully registered!!`,
         });
-        login(res.data.accessToken);
         setTimeout(() => {
           navigate("/dashboard");
         }, 2000);

@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
   });
   const [message, setMessage] = useState(null);
 
-  const login = (token) => {
+  const loginUser = (token) => {
     let decodedToken = jwtDecode(token);
     let user = {
       email: decodedToken.email,
@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }) => {
       if (res.data.ok) {
         localStorage.removeItem("user");
         setIsLoggedIn(false);
+        setCurrentUser(null);
         setMessage({
           type: "success",
           textContent: `Logged out !!`,
@@ -40,7 +41,10 @@ export const AuthProvider = ({ children }) => {
         clearMessageAsync(setMessage);
       }
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.data.message) {
+        setMessage({ type: "error", textContent: error.response.data.message });
+      }
+      clearMessageAsync(setMessage);
     }
   };
 
@@ -51,7 +55,7 @@ export const AuthProvider = ({ children }) => {
         isLoggedIn,
         setCurrentUser,
         currentUser,
-        login,
+        loginUser,
         logout,
         message,
         setMessage,

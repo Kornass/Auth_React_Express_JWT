@@ -4,13 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { clearMessageAsync } from "../utils/userUtils";
 
-function SignUp() {
+function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  const { login, message, setMessage } = useContext(AuthContext);
+  const { loginUser, message, setMessage } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const messageRef = useRef(null);
@@ -31,7 +31,7 @@ function SignUp() {
           type: "success",
           textContent: `Welcome back ${res.data.email} !!`,
         });
-        login(res.data.accessToken);
+        loginUser(res.data.accessToken);
         setTimeout(() => {
           navigate("/dashboard");
         }, 2000);
@@ -91,4 +91,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default Login;
