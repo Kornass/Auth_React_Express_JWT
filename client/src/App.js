@@ -7,8 +7,7 @@ import {
 } from "react-router-dom";
 import { useContext, useEffect } from "react";
 
-import Register from "./views/Register";
-import Login from "./views/Login";
+import AuthForm from "./views/AuthForm";
 import Dashboard from "./views/Dashboard";
 import Navbar from "./components/Navbar";
 
@@ -36,11 +35,11 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={!isLoggedIn ? <Login /> : <Navigate to="/dashboard" />}
+            element={!isLoggedIn ? <AuthForm /> : <Navigate to="/dashboard" />}
           />
           <Route
             path="/register"
-            element={!isLoggedIn ? <Register /> : <Navigate to="/dashboard" />}
+            element={!isLoggedIn ? <AuthForm /> : <Navigate to="/dashboard" />}
           />
           <Route
             path="/dashboard"

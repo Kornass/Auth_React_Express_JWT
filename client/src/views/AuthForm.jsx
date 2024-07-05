@@ -1,19 +1,26 @@
-import { useState, useContext, useEffect, useRef } from "react";
+import { useState, useContext, useRef, useEffect } from "react";
 import { axiosPublic } from "../api/axiosPublic";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { useLocation } from "react-router-dom";
 import { clearMessageAsync } from "../utils/userUtils";
 
-function Login() {
+function AuthForm() {
   const [formData, setFormData] = useState({
+    login: "",
     email: "",
     password: "",
+    password2: "",
   });
 
   const { loginUser, message, setMessage } = useContext(AuthContext);
 
-  const navigate = useNavigate();
   const messageRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const formType = location.pathname.includes("register")
+    ? "register"
+    : "login";
 
   const handleChange = (e) => {
     setFormData((prevState) => ({
@@ -25,13 +32,16 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      let res = await axiosPublic.post(`/users/login`, formData);
+      let res = await axiosPublic.post(`/users/${formType}`, formData);
       if (res.status === 200 && res.data.accessToken) {
+        loginUser(res.data.accessToken);
         setMessage({
           type: "success",
-          textContent: `Welcome back ${res.data.email} !!`,
+          textContent:
+            formType === "register"
+              ? `User ${res.data.email} successfully registered!!`
+              : `Welcome back ${res.data.email} !!`,
         });
-        loginUser(res.data.accessToken);
         setTimeout(() => {
           navigate("/dashboard");
         }, 2000);
@@ -64,6 +74,17 @@ function Login() {
 
   return (
     <form onSubmit={handleSubmit}>
+      {formType === "register" && (
+        <>
+          <label htmlFor="login">Login</label>
+          <input
+            id="login"
+            onChange={handleChange}
+            required
+            value={formData.login}
+          />
+        </>
+      )}
       <label htmlFor="email">Email</label>
       <input
         id="email"
@@ -78,7 +99,20 @@ function Login() {
         required
         value={formData.password}
       />
-      <button type="submit">Log in!</button>
+      {formType === "register" && (
+        <>
+          <label htmlFor="password2">Repeat password</label>
+          <input
+            id="password2"
+            onChange={handleChange}
+            required
+            value={formData.password2}
+          />
+        </>
+      )}
+      <button type="submit">
+        {formType === "register" ? "Sign up!" : "Login!"}
+      </button>
       <p
         style={{
           color: message?.type === "error" ? "red" : "green",
@@ -91,4 +125,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default AuthForm;
