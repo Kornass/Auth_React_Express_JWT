@@ -73,10 +73,18 @@ function Dashboard() {
       <h2>User data</h2>
       {currentUser && (
         <>
-          <p>Login: {login}</p>
-          <p>Email: {email}</p>
-          <p>_ID: {_id}</p>
-          <p>access token: {token}</p>
+          <p>
+            <strong>Login:</strong> {login}
+          </p>
+          <p>
+            <strong>Email:</strong> {email}
+          </p>
+          <p>
+            <strong>_ID:</strong> {_id}
+          </p>
+          <p id="token">
+            <strong>Access token:</strong> {token}
+          </p>
         </>
       )}
     </div>

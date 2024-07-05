@@ -89,4 +89,8 @@ button:hover {
 }
 .wrapper {
   text-align: center;
+  padding: 1rem;
+}
+#token {
+  word-break: break-word;
 }
